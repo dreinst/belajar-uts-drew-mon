@@ -142,6 +142,15 @@
   .pilih-profil { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: grid; place-items: center; z-index: 50; }
   .pilih-profil .kartu { text-align: center; max-width: 360px; }
   .pilih-profil button { margin: 6px; padding: 10px 22px; font-size: 16px; }
+  .fokus { margin-top: 16px; border-left: 5px solid var(--hijau); }
+  .fokus.monica { border-left-color: var(--peach); }
+  .fokus h2 { margin-bottom: 8px; }
+  .fokus table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 6px 0 10px; }
+  .fokus td, .fokus th { text-align: left; vertical-align: top; padding: 5px 6px; border-top: 1px solid var(--garis); }
+  .fokus th { font-size: 12px; color: var(--teks2); border-top: none; }
+  .fokus ol { margin: 4px 0 8px; padding-left: 20px; font-size: 14px; }
+  .chip.milik { background: var(--hijau); color: #fff; }
+  .chip.partner { background: var(--muted); color: var(--teks2); }
 </style>
 </head>
 <body>
@@ -167,6 +176,7 @@
 </nav>
 
 <main>
+<div id="fokus"></div>
 
 <!-- ===================================================== -->
 <!-- 1. SANDBOX APLIKASI                                    -->
@@ -208,6 +218,7 @@
 <!-- ===================================================== -->
 <section id="fungsi">
   <h2>2. Fungsi satu per satu</h2>
+  <p class="sub" id="fungsi-ket"></p>
   <p class="sub">Ketik input, lihat output. Coba nilai aneh seperti <code class="inline">7O</code>, <code class="inline">10,6</code>, <code class="inline">-3</code>, <code class="inline">NaN</code>, atau <code class="inline">1e2</code>.</p>
   <div class="grid-fungsi">
     <div class="kartu fungsi">
@@ -764,10 +775,11 @@ git push</pre>
 }
 
 function gambarTugas() {
-  $("#daftar-tugas").innerHTML = TUGAS.map((t, i) => `<div class="kartu tugas" id="tugas-${i}">
+  const urutan = TUGAS.map((t, i) => i).sort((x, y) => (profil ? (TUGAS[y].siapa === profil) - (TUGAS[x].siapa === profil) : 0) || x - y);
+  $("#daftar-tugas").innerHTML = urutan.map(i => [TUGAS[i], i]).map(([t, i]) => `<div class="kartu tugas" id="tugas-${i}">
     <span class="status-tugas chip" id="st-${i}">Belum</span>
     <h3>${i + 1}. ${esc(t.judul)}</h3>
-    <div><span class="chip ${t.siapa}">${t.siapa === "andrew" ? "Andrew (UI)" : "Monica (logika)"}</span></div>
+    <div><span class="chip ${t.siapa}">${t.siapa === "andrew" ? "Andrew (UI)" : "Monica (logika)"}</span> ${profil ? (t.siapa === profil ? '<span class="chip milik">Bagianmu</span>' : '<span class="chip partner">Bagian partner</span>') : ""}</div>
     <p>${esc(t.soal)}</p>
     ${kotakLokasi(i)}
     <p style="margin:8px 0 4px;font-size:14px">Potongan kode dari <code class="inline">${t.file}</code>. Edit di sini dulu:</p>
@@ -855,6 +867,69 @@ document.querySelectorAll(".filter-kuis").forEach(b => b.onclick = () => { filte
 $("#ulang-kuis").onclick = () => { for (const k in jawaban) delete jawaban[k]; progres.jawaban = {}; simpanProgres(); gambarKuis(); };
 
 
+
+// ---------- Fokus per profil ----------
+// Sesuai pembagian di CONTRIBUTIONS.md: Andrew utama di UI Compose, Monica utama di logika dan validasi.
+const FOKUS = {
+  andrew: {
+    peran: "UI Jetpack Compose (utama) dan review logika",
+    commit: [["4ed112c", "1", "chore: set up Compose project"], ["bc52bd8", "2", "feat: add Material 3 theme from Figma design"], ["7bd0f85", "9", "feat: build measurement form with validation messages"], ["ce5606a", "10", "feat: add summary tiles and LazyColumn history with empty state"], ["64dfd39", "11", "docs: README, test cases, wireframe, screenshots"], ["81e2eda", "12", "docs: contributions, AI usage, presentation plan"]],
+    file: [
+      ["MainActivity.kt", "setContent, enableEdgeToEdge, dibungkus GrowthTrackEduTheme"],
+      ["ui/theme/Color.kt, Theme.kt", "warna Figma dipetakan ke colorScheme, alasan tanpa dynamic color"],
+      ["ui/GrowthTrackScreen.kt", "remember, mutableStateOf, mutableStateListOf, state hoisting ke GrowthForm, LazyColumn + items(key), Scaffold + snackbar dengan scope.launch, Modifier.weight"],
+      ["app/build.gradle.kts", "minSdk 26 untuk LocalDate, compose = true, Compose BOM"],
+    ],
+    urutan: [
+      "Sandbox: buka tab <b>Isi state</b>, simpan beberapa data, perhatikan records dan nextId berubah.",
+      "Kuis bagian Andrew sampai semua benar, lalu kuis Bersama.",
+      "Latihan live modification 4, 5, dan 6 (milikmu), lalu coba ulang di Android Studio.",
+      "Pelajari bagian Monica minimal sampai bisa menjelaskan alur validate dan changeOf.",
+    ],
+    partner: "Monica (logika): GrowthRecord, GrowthValidator, GrowthCalculator, Formatters, komponen UI. Dosen tetap bisa menanyakannya ke kamu.",
+    tab: "state",
+  },
+  monica: {
+    peran: "Logika dan validasi (utama) dan review UI",
+    commit: [["cbe8b80", "3", "feat: add GrowthRecord data class"], ["27dd9ed", "4", "feat: add growth form validation"], ["2a67a8e", "5", "test: add unit tests for form validation"], ["5e18000", "6", "feat: add summary and change-from-previous calculation"], ["1ec3eed", "7", "test: add unit tests for summary and change calculation"], ["e188703", "8", "feat: add shared UI components"]],
+    file: [
+      ["model/GrowthRecord.kt", "data class, alasan tipe Int/Double/LocalDate, val dan copy"],
+      ["logic/GrowthValidator.kt", "urutan cabang when, toIntOrNull, parseDecimal, sealed class ValidationResult, clearChanged, const val batas"],
+      ["logic/GrowthCalculator.kt, Formatters.kt", "previousOf, changeOf, measurementNumber, summarize + distinct, formatDiff dan pembulatan"],
+      ["ui/components/", "MetricTile dipakai di header dan card, EmptyState, DatePickerField (milidetik UTC ke LocalDate)"],
+      ["app/src/test/", "7 test validator dan 5 test kalkulator, cara menjalankan testDebugUnitTest"],
+    ],
+    urutan: [
+      "Sandbox: buka tab <b>Jejak eksekusi</b>, pakai tombol test case 3 sampai 7, perhatikan cabang when yang terpakai.",
+      "Bagian 2 Fungsi satu per satu: coba input aneh di setiap fungsi.",
+      "Kuis bagian Monica sampai semua benar, lalu kuis Bersama.",
+      "Latihan live modification 1, 2, 3, dan 7 (milikmu), termasuk mengubah unit test-nya, lalu coba ulang di Android Studio.",
+      "Pelajari bagian Andrew minimal sampai bisa menjelaskan state, LazyColumn, dan kenapa ringkasan berubah otomatis.",
+    ],
+    partner: "Andrew (UI): setup project, tema, GrowthTrackScreen (state, form, LazyColumn, snackbar). Dosen tetap bisa menanyakannya ke kamu.",
+    tab: "jejak",
+  },
+};
+
+function gambarFokus() {
+  if (!profil) { $("#fokus").innerHTML = ""; return; }
+  const f = FOKUS[profil];
+  $("#fokus").innerHTML = `<div class="kartu fokus ${profil}">
+    <h2>Fokus kamu, ${NAMA_PROFIL[profil]}</h2>
+    <div><span class="chip ${profil}">${esc(f.peran)}</span></div>
+    <table><tr><th>Commit milikmu</th><th>Hash</th></tr>
+      ${f.commit.map(([h, n, m]) => `<tr><td>${n}. <code class="inline">${esc(m)}</code></td><td><code>${h}</code></td></tr>`).join("")}</table>
+    <table><tr><th>File yang kamu pegang</th><th>Yang wajib bisa dijelaskan</th></tr>
+      ${f.file.map(([fl, isi]) => `<tr><td><code>${esc(fl)}</code></td><td>${esc(isi)}</td></tr>`).join("")}</table>
+    <b>Urutan belajar</b><ol>${f.urutan.map(u => `<li>${u}</li>`).join("")}</ol>
+    <small><b>Bagian partner:</b> ${esc(f.partner)} PDF bagian 10: kedua anggota wajib mampu menjelaskan dan memodifikasi seluruh aplikasi.</small>
+  </div>`;
+  $("#fungsi-ket").innerHTML = profil === "monica"
+    ? "<b>Ini bagianmu.</b> Semua fungsi di bawah ada di logic/GrowthValidator.kt dan logic/Formatters.kt yang kamu commit."
+    : "<b>Bagian Monica.</b> Kamu cukup tahu input dan output-nya, karena hasil fungsi ini yang kamu tampilkan di form dan card.";
+  document.querySelector(`[data-tab="${f.tab}"]`).click();
+}
+
 // ---------- Profil (tanpa password) ----------
 // Progres disimpan di localStorage browser, terpisah per profil:
 // gte-data-andrew dan gte-data-monica berisi { jawaban, tugas, kode }.
@@ -894,6 +969,7 @@ function muatProfil(nama) {
   filterKuis = nama;
   document.querySelectorAll(".filter-kuis").forEach(x => x.classList.toggle("aktif", x.dataset.f === nama));
   gambarKuis();
+  gambarFokus();
   infoProgres();
   const dlg = $("#pilih-profil"); if (dlg) dlg.remove();
 }
