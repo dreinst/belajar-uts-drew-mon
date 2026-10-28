@@ -1,0 +1,933 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latihan GrowthTrack Edu (HT-07)</title>
+<style>
+  /* Warna sama dengan ui/theme/Color.kt di aplikasi */
+  :root {
+    --hijau: #14563A; --hijau-c: #D3EDDD; --hijau-on: #0F4D31; --aksen: #2E8B5E;
+    --peach: #F08A4B; --peach-c: #FFE9DC; --peach-on: #6B3A1E;
+    --bg: #F7F8F4; --surface: #fff; --muted: #F0F2EE; --teks: #191C1A; --teks2: #5B635D;
+    --garis: #C3CAC4; --merah: #BA1A1A; --merah-c: #FFDAD6; --kode: #1E2420;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--teks); line-height: 1.5; }
+  header.atas { background: var(--hijau); color: #fff; padding: 20px 24px; }
+  header.atas h1 { margin: 0 0 4px; font-size: 22px; }
+  header.atas p { margin: 0; color: #BFE3CD; font-size: 14px; }
+  nav { position: sticky; top: 0; z-index: 5; background: #fff; border-bottom: 1px solid var(--garis); display: flex; gap: 4px; padding: 8px 16px; overflow-x: auto; }
+  nav a { text-decoration: none; color: var(--hijau); padding: 6px 12px; border-radius: 16px; font-size: 14px; white-space: nowrap; }
+  nav a:hover { background: var(--hijau-c); }
+  main { max-width: 1200px; margin: 0 auto; padding: 16px; }
+  section { margin: 24px 0 40px; }
+  h2 { color: var(--hijau); margin: 0 0 4px; }
+  .sub { color: var(--teks2); margin: 0 0 16px; font-size: 14px; }
+  .kartu { background: var(--surface); border-radius: 16px; padding: 16px; box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+  .grid2 { display: grid; grid-template-columns: 400px 1fr; gap: 16px; align-items: start; }
+  .grid-fungsi { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+  @media (max-width: 900px) { .grid2 { grid-template-columns: 1fr; } }
+  code, pre, textarea.kode { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; }
+  pre { background: var(--kode); color: #E4EDE6; padding: 12px; border-radius: 10px; overflow-x: auto; margin: 8px 0; white-space: pre; }
+  code.inline { background: var(--muted); padding: 1px 5px; border-radius: 4px; }
+  button { font: inherit; cursor: pointer; border-radius: 20px; border: 1px solid var(--garis); background: #fff; padding: 6px 14px; color: var(--hijau); }
+  button.utama { background: var(--hijau); color: #fff; border-color: var(--hijau); }
+  button:hover { filter: brightness(.96); }
+  label.kecil { font-size: 12px; color: var(--teks2); display: block; margin-bottom: 2px; }
+  input, select, textarea { font: inherit; }
+  .chip { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 8px; background: var(--muted); color: var(--teks2); }
+  .chip.andrew { background: #E4E1F5; color: #433A80; }
+  .chip.monica { background: var(--peach-c); color: var(--peach-on); }
+  .chip.bersama { background: var(--hijau-c); color: var(--hijau-on); }
+
+  /* ---------- Tiruan layar HP ---------- */
+  .hp { background: var(--bg); border: 8px solid #222; border-radius: 32px; overflow: hidden; height: 760px; display: flex; flex-direction: column; position: relative; }
+  .hp-isi { overflow-y: auto; flex: 1; padding-bottom: 24px; }
+  .hp-header { background: var(--hijau); border-radius: 0 0 24px 24px; padding: 14px 16px 16px; color: #fff; }
+  .hp-judul { display: flex; gap: 10px; align-items: center; }
+  .hp-logo { width: 34px; height: 34px; border-radius: 10px; background: var(--aksen); display: grid; place-items: center; }
+  .hp-judul b { font-size: 18px; display: block; }
+  .hp-judul small { color: #BFE3CD; }
+  .tiles { display: flex; gap: 6px; margin-top: 14px; }
+  .tile { flex: 1; background: #fff; color: var(--teks); border-radius: 12px; padding: 8px 10px; min-width: 0; }
+  .tile .bar { width: 18px; height: 3px; border-radius: 2px; margin-bottom: 5px; }
+  .tile .nilai { font-size: 17px; font-weight: 600; }
+  .tile .nilai small { font-size: 11px; color: var(--teks2); font-weight: 400; }
+  .tile .lbl { font-size: 11px; color: var(--teks2); }
+  .tile .foot { font-size: 11px; font-weight: 600; color: var(--hijau); }
+  .tile .foot.abu { color: var(--teks2); font-weight: 400; }
+  .banner { margin: 14px 12px 0; padding: 9px 12px; border-radius: 12px; font-size: 12px; display: flex; gap: 8px; align-items: center; }
+  .banner.aman { background: var(--peach-c); color: var(--peach-on); }
+  .banner.salah { background: var(--merah-c); color: #410002; }
+  .form { margin: 14px 12px 0; background: #fff; border-radius: 20px; padding: 14px 14px 6px; }
+  .form h3 { margin: 0 0 8px; font-size: 16px; }
+  .baris { display: flex; gap: 10px; }
+  .baris > .field { flex: 1; min-width: 0; }
+  .field { margin-bottom: 4px; }
+  .field .kotak { position: relative; }
+  .field input, .field textarea { width: 100%; border: 1px solid var(--garis); border-radius: 10px; padding: 10px 34px 10px 10px; background: #fff; }
+  .field textarea { padding-right: 10px; resize: vertical; min-height: 48px; }
+  .field .satuan { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--teks2); pointer-events: none; }
+  .field .bantu { font-size: 11px; color: var(--teks2); min-height: 16px; padding-left: 4px; }
+  .field.err input, .field.err textarea { border: 2px solid var(--merah); }
+  .field.err .bantu, .field.err label.kecil { color: var(--merah); }
+  .btn-simpan { width: 100%; height: 44px; margin-top: 6px; }
+  .btn-reset { width: 100%; border: none; margin: 4px 0; }
+  .riwayat-judul { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 12px 6px; }
+  .riwayat-judul b { font-size: 15px; }
+  .riwayat-judul small { color: var(--teks2); font-size: 11px; }
+  .kosong { margin: 0 12px; background: #fff; border-radius: 20px; padding: 22px; text-align: center; }
+  .kosong .ikon { width: 50px; height: 50px; border-radius: 50%; background: var(--hijau-c); display: grid; place-items: center; margin: 0 auto 6px; color: var(--hijau); font-size: 22px; }
+  .kosong small { color: var(--teks2); }
+  .card { margin: 8px 12px 0; background: #fff; border-radius: 18px; padding: 12px; }
+  .card-atas { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 600; flex: none; }
+  .card-atas .nama { flex: 1; min-width: 0; }
+  .card-atas .nama b { display: block; font-size: 14px; }
+  .card-atas .nama small { color: var(--teks2); font-size: 12px; }
+  .tag { font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 8px; }
+  .card .tiles { margin-top: 0; }
+  .card .tile { background: var(--bg); }
+  .card .ket { font-size: 12px; color: var(--teks2); margin-top: 8px; }
+  .snackbar { position: absolute; left: 12px; right: 12px; bottom: 12px; background: #2F3330; color: #fff; padding: 12px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .snackbar.tampil { opacity: 1; }
+
+  /* ---------- Panel jejak ---------- */
+  .tab-btn { margin: 0 4px 8px 0; }
+  .tab-btn.aktif { background: var(--hijau); color: #fff; }
+  .jejak { font-size: 13px; }
+  .jejak .langkah { border-left: 3px solid var(--garis); padding: 4px 0 4px 10px; margin: 6px 0; }
+  .jejak .langkah.ok { border-color: var(--aksen); }
+  .jejak .langkah.no { border-color: var(--merah); }
+  .jejak .langkah b { display: block; }
+  .preset { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .preset button { font-size: 12px; padding: 4px 10px; }
+  .konst { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 8px; }
+  .konst input { width: 100%; padding: 6px 8px; border: 1px solid var(--garis); border-radius: 8px; }
+  .hasil { background: var(--muted); padding: 8px 10px; border-radius: 8px; margin-top: 8px; font-family: ui-monospace, Menlo, monospace; font-size: 13px; white-space: pre-wrap; }
+  .fungsi input { width: 100%; padding: 8px; border: 1px solid var(--garis); border-radius: 8px; }
+  .fungsi h4 { margin: 0 0 4px; }
+  .fungsi p { margin: 4px 0; font-size: 13px; color: var(--teks2); }
+
+  /* ---------- Live modification ---------- */
+  .tugas { margin-bottom: 16px; }
+  .tugas h3 { margin: 0 0 4px; font-size: 17px; }
+  textarea.kode { width: 100%; min-height: 150px; background: var(--kode); color: #E4EDE6; border-radius: 10px; padding: 12px; border: none; line-height: 1.45; tab-size: 4; }
+  .aksi { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .umpan { margin-top: 8px; padding: 8px 12px; border-radius: 10px; font-size: 14px; display: none; }
+  .umpan.benar { display: block; background: var(--hijau-c); color: var(--hijau-on); }
+  .umpan.salah { display: block; background: var(--merah-c); color: #410002; }
+  .petunjuk { display: none; margin-top: 8px; font-size: 14px; background: var(--peach-c); color: var(--peach-on); padding: 8px 12px; border-radius: 10px; }
+  .jawaban { display: none; }
+  .status-tugas { float: right; }
+
+  /* ---------- Kuis ---------- */
+  .soal { margin-bottom: 12px; }
+  .soal .teks { font-weight: 600; margin-bottom: 8px; }
+  .opsi { display: block; width: 100%; text-align: left; border-radius: 10px; margin: 4px 0; padding: 8px 12px; color: var(--teks); }
+  .opsi.benar { background: var(--hijau-c); border-color: var(--aksen); }
+  .opsi.salah { background: var(--merah-c); border-color: var(--merah); }
+  .bahas { display: none; margin-top: 8px; font-size: 14px; color: var(--teks2); }
+  .skor { position: sticky; top: 52px; z-index: 4; background: var(--hijau-c); color: var(--hijau-on); padding: 8px 14px; border-radius: 12px; margin-bottom: 12px; font-weight: 600; }
+  .lokasi { background: var(--muted); border-radius: 10px; padding: 10px 12px; font-size: 13px; margin: 8px 0; }
+  .lokasi table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  .lokasi td { vertical-align: top; padding: 4px 6px; border-top: 1px solid var(--garis); }
+  .lokasi td:first-child { width: 52%; word-break: break-all; }
+  .lokasi td small { color: var(--teks2); }
+  .lokasi pre { margin: 4px 0; }
+  .profil-bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 10px 16px; background: var(--hijau-c); font-size: 14px; }
+  .profil-btn.aktif { background: var(--hijau); color: #fff; border-color: var(--hijau); }
+  .profil-info { color: var(--hijau-on); }
+  .pilih-profil { position: fixed; inset: 0; background: rgba(0,0,0,.45); display: grid; place-items: center; z-index: 50; }
+  .pilih-profil .kartu { text-align: center; max-width: 360px; }
+  .pilih-profil button { margin: 6px; padding: 10px 22px; font-size: 16px; }
+</style>
+</head>
+<body>
+
+<header class="atas">
+  <h1>Latihan GrowthTrack Edu (HT-07)</h1>
+  <p>Sandbox untuk memahami input dan output kode UTS, latihan live modification, dan kuis defense. Logika di halaman ini meniru GrowthValidator dan GrowthCalculator di aplikasi.</p>
+</header>
+
+<div class="profil-bar">
+  <span>Profil:</span>
+  <button class="profil-btn" data-profil="andrew">Andrew</button>
+  <button class="profil-btn" data-profil="monica">Monica</button>
+  <span class="profil-info" id="profil-info"></span>
+  <button id="reset-progres" style="margin-left:auto">Reset progres profil ini</button>
+</div>
+
+<nav>
+  <a href="#sandbox">1. Sandbox aplikasi</a>
+  <a href="#fungsi">2. Fungsi satu per satu</a>
+  <a href="#modifikasi">3. Live modification</a>
+  <a href="#kuis">4. Kuis defense</a>
+</nav>
+
+<main>
+
+<!-- ===================================================== -->
+<!-- 1. SANDBOX APLIKASI                                    -->
+<!-- ===================================================== -->
+<section id="sandbox">
+  <h2>1. Sandbox aplikasi</h2>
+  <p class="sub">Isi form seperti di HP lalu tekan Simpan. Panel kanan menunjukkan langkah yang dijalankan kode Kotlin: nilai mentah, hasil konversi, dan cabang <code class="inline">when</code> yang terpakai.</p>
+  <div class="grid2">
+    <div class="hp">
+      <div class="hp-isi" id="hp-isi"></div>
+      <div class="snackbar" id="snackbar"></div>
+    </div>
+    <div>
+      <div class="kartu" style="margin-bottom:12px">
+        <b>Isi otomatis dari test case</b>
+        <p class="sub" style="margin:2px 0 8px">Mengisi form sesuai skenario di docs/test-cases.md. Setelah terisi, tekan Simpan di HP.</p>
+        <div class="preset" id="preset"></div>
+      </div>
+      <div class="kartu">
+        <button class="tab-btn aktif" data-tab="jejak">Jejak eksekusi</button>
+        <button class="tab-btn" data-tab="state">Isi state</button>
+        <button class="tab-btn" data-tab="konst">Ubah konstanta</button>
+        <div id="tab-jejak" class="jejak">Belum ada langkah. Tekan <b>Simpan pengukuran</b> di HP.</div>
+        <div id="tab-state" style="display:none"></div>
+        <div id="tab-konst" style="display:none">
+          <p class="sub" style="margin:0 0 8px">Sama seperti mengubah <code class="inline">const val</code> di <code class="inline">logic/GrowthValidator.kt</code>. Perubahan langsung dipakai saat Simpan berikutnya.</p>
+          <div class="konst" id="konst"></div>
+          <pre id="konst-kotlin"></pre>
+          <label style="font-size:14px"><input type="checkbox" id="pakai-clear" checked> Pakai <code class="inline">errors.clearChanged(form, it)</code> (pesan merah hilang saat kolom diedit)</label>
+          <div class="aksi"><button id="reset-konst">Kembalikan ke nilai asli</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- 2. FUNGSI SATU PER SATU                                -->
+<!-- ===================================================== -->
+<section id="fungsi">
+  <h2>2. Fungsi satu per satu</h2>
+  <p class="sub">Ketik input, lihat output. Coba nilai aneh seperti <code class="inline">7O</code>, <code class="inline">10,6</code>, <code class="inline">-3</code>, <code class="inline">NaN</code>, atau <code class="inline">1e2</code>.</p>
+  <div class="grid-fungsi">
+    <div class="kartu fungsi">
+      <h4><code>"teks".toIntOrNull()</code></h4>
+      <p>Dipakai untuk usia. Hasil null berarti bukan bilangan bulat, lalu muncul pesan "Isi dengan angka bulat".</p>
+      <input id="f-int" value="7O">
+      <div class="hasil" id="f-int-out"></div>
+    </div>
+    <div class="kartu fungsi">
+      <h4><code>GrowthValidator.parseDecimal(text)</code></h4>
+      <p>Dipakai untuk berat dan tinggi. Koma diganti titik dulu, NaN dan Infinity ditolak.</p>
+      <input id="f-dec" value="10,6">
+      <div class="hasil" id="f-dec-out"></div>
+    </div>
+    <div class="kartu fungsi">
+      <h4>Validasi kode anak</h4>
+      <p><code>trim()</code>, <code>uppercase()</code>, lalu dicek kosong, panjang, dan pola <code>^[A-Z0-9-]+$</code>.</p>
+      <input id="f-kode" value=" a-01 ">
+      <div class="hasil" id="f-kode-out"></div>
+    </div>
+    <div class="kartu fungsi">
+      <h4><code>formatDiff(diff, unit)</code></h4>
+      <p>Selisih dibulatkan satu desimal, lalu diberi tanda ▲, ▼, atau =.</p>
+      <div class="baris"><input id="f-diff" value="0.4"><input id="f-diff-unit" value="kg" style="max-width:70px"></div>
+      <div class="hasil" id="f-diff-out"></div>
+    </div>
+    <div class="kartu fungsi">
+      <h4><code>formatDecimal(value)</code></h4>
+      <p>Format angka Indonesia, satu angka di belakang koma.</p>
+      <input id="f-fmt" value="10.66">
+      <div class="hasil" id="f-fmt-out"></div>
+    </div>
+    <div class="kartu fungsi">
+      <h4>Berat atau tinggi: urutan cek</h4>
+      <p>Isi teks, pilih kolom. Urutan <code>when</code>: kosong, bukan angka, tidak positif, di luar batas.</p>
+      <div class="baris"><input id="f-bt" value="-3"><select id="f-bt-jenis"><option value="b">Berat</option><option value="t">Tinggi</option></select></div>
+      <div class="hasil" id="f-bt-out"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- 3. LIVE MODIFICATION                                   -->
+<!-- ===================================================== -->
+<section id="modifikasi">
+  <h2>3. Latihan live modification</h2>
+  <p class="sub">Contoh perubahan yang biasa diminta dosen saat defense. Edit kode Kotlin di kotak gelap, lalu tekan Periksa. Kalau benar, perubahan langsung diterapkan ke sandbox di atas supaya hasilnya terlihat. Setelah lancar di sini, coba lakukan hal yang sama di Android Studio.</p>
+  <div class="kartu" style="margin-bottom:16px">
+    <b>Alur kerja live modification</b>
+    <ol style="margin:8px 0 0; padding-left:20px; font-size:14px">
+      <li><b>Buka repo di Android Studio.</b> Andrew: <code class="inline">~/ndru/GrowthEduTrack</code>. Monica: <code class="inline">~/Downloads/GrowthEduTrack</code>. Keduanya clone dari <code class="inline">github.com/dreinst/uts-mobile-ht-07-growthedutrack</code>, branch <code class="inline">main</code>.</li>
+      <li><b>Cari file.</b> Semua kode ada di bawah <code class="inline">app/src/main/java/id/ac/machung/growthtrackedu/</code>, unit test di <code class="inline">app/src/test/java/id/ac/machung/growthtrackedu/</code>. Cara cepat: tekan <b>Cmd+Shift+O</b> (Mac) atau <b>Ctrl+Shift+N</b> (Windows), lalu ketik nama file. Untuk lompat ke baris tertentu: <b>Cmd+L</b> atau <b>Ctrl+G</b>.</li>
+      <li><b>Ubah semua file yang disebut di kotak "Lokasi file"</b> pada latihan, termasuk unit test. Kalau test tidak ikut diubah, <code class="inline">./gradlew testDebugUnitTest</code> akan gagal.</li>
+      <li><b>Cek hasilnya:</b> Run <code class="inline">app</code> di emulator atau HP, lalu jalankan unit test (klik kanan <code class="inline">app/src/test</code>, Run Tests).</li>
+      <li><b>Saat latihan, jangan commit.</b> Batalkan semua perubahan dengan:<pre>git restore .</pre>Repo kembali sama seperti di GitHub dan jumlah commit tetap 12.</li>
+      <li><b>Kalau dosen minta perubahannya disimpan</b>, commit di repo yang sama (branch <code class="inline">main</code>) memakai pesan commit dari kotak latihan, lalu push:<pre>git add -A
+git commit -m "pesan commit dari kotak latihan"
+git push</pre>Commit ini menambah jumlah commit menjadi 13 dan seterusnya. Itu tidak melanggar PDF karena syaratnya minimal 12.</li>
+    </ol>
+  </div>
+  <div id="daftar-tugas"></div>
+</section>
+
+<!-- ===================================================== -->
+<!-- 4. KUIS DEFENSE                                        -->
+<!-- ===================================================== -->
+<section id="kuis">
+  <h2>4. Kuis defense</h2>
+  <p class="sub">Pertanyaan yang mungkin muncul saat defense individual. Pilih filter sesuai bagian yang kamu pegang, tapi PDF meminta kedua anggota paham seluruh aplikasi.</p>
+  <div class="aksi" style="margin-bottom:12px">
+    <button class="filter-kuis aktif tab-btn" data-f="semua">Semua</button>
+    <button class="filter-kuis tab-btn" data-f="andrew">Andrew</button>
+    <button class="filter-kuis tab-btn" data-f="monica">Monica</button>
+    <button class="filter-kuis tab-btn" data-f="bersama">Bersama</button>
+    <button id="ulang-kuis">Ulangi kuis</button>
+  </div>
+  <div class="skor" id="skor"></div>
+  <div id="daftar-soal"></div>
+</section>
+
+</main>
+
+<!-- ===================================================== -->
+<!-- LOGIKA: tiruan Kotlin. Blok ini juga diuji dengan       -->
+<!-- kasus yang sama seperti unit test di app/src/test.      -->
+<!-- ===================================================== -->
+<script id="logika">
+// Nilai awal sama dengan const val di GrowthValidator.kt
+const KONSTANTA_ASLI = { MIN_AGE: 0, MAX_AGE: 60, MIN_WEIGHT: 1.0, MAX_WEIGHT: 40.0, MIN_HEIGHT: 40.0, MAX_HEIGHT: 130.0, MAX_CODE_LENGTH: 10, MAX_NOTE_LENGTH: 100 };
+
+// Modifikasi dari latihan live modification. Semua false berarti aplikasi persis seperti versi UTS
+const MOD_ASLI = { pesanKode: null, catatanWajib: false, tileAnak: false, tagPeach: false, terlamaDulu: false, tandaKata: false };
+
+const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
+/** Meniru String.toIntOrNull() Kotlin: tanda + atau - boleh, sisanya harus digit, dan muat di Int 32 bit. */
+function toIntOrNull(teks) {
+  if (!/^[+-]?\d+$/.test(teks)) return null;
+  const n = Number(teks);
+  return n >= -2147483648 && n <= 2147483647 ? n : null;
+}
+
+/** Meniru String.toDoubleOrNull() Kotlin untuk penulisan desimal (termasuk 1e2, NaN, Infinity, akhiran f/d). */
+function toDoubleOrNull(teks) {
+  if (!/^[+-]?(NaN|Infinity|((\d+\.?\d*|\.\d+)([eE][+-]?\d+)?)[fFdD]?)$/.test(teks)) return null;
+  return Number(teks.replace(/[fFdD]$/, ""));
+}
+
+/** GrowthValidator.parseDecimal */
+function parseDecimal(teks) {
+  const v = toDoubleOrNull(teks.trim().replaceAll(",", "."));
+  if (v === null) return null;
+  return Number.isNaN(v) || !Number.isFinite(v) ? null : v;
+}
+
+/** GrowthValidator.formatNumber: 40.0 ditulis "40" */
+function formatNumber(v) { return v % 1 === 0 ? String(Math.trunc(v)) : String(v); }
+
+/** GrowthValidator.decimalError. Mengembalikan [pesan, nama cabang] supaya jejak bisa ditampilkan */
+function decimalError(teks, nilai, label, min, max) {
+  if (teks.trim() === "") return [`${label} wajib diisi`, "text.isBlank()"];
+  if (nilai === null) return ["Isi dengan angka", "value == null"];
+  if (nilai <= 0) return ["Harus lebih dari 0", "value <= 0.0"];
+  if (nilai < min || nilai > max) return [`Isi ${formatNumber(min)} sampai ${formatNumber(max)}`, "value < min || value > max"];
+  return [null, "else -> null"];
+}
+
+/** Membandingkan dua LocalDate yang disimpan sebagai string "yyyy-mm-dd" */
+function bandingTanggal(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
+
+/**
+ * GrowthValidator.validate. input berisi teks mentah seperti GrowthFormInput.
+ * Hasil: { valid, errors, nilai, jejak }. jejak dipakai panel "Jejak eksekusi".
+ */
+function validate(input, today, K = KONSTANTA_ASLI, mod = MOD_ASLI) {
+  const jejak = [];
+  const kode = input.childCode.trim().toUpperCase();
+  let kodeErr, kodeCab;
+  if (kode === "") { kodeErr = mod.pesanKode || "Kode anak wajib diisi"; kodeCab = "code.isEmpty()"; }
+  else if (kode.length > K.MAX_CODE_LENGTH) { kodeErr = `Maksimal ${K.MAX_CODE_LENGTH} karakter`; kodeCab = "code.length > MAX_CODE_LENGTH"; }
+  else if (!/^[A-Z0-9-]+$/.test(kode)) { kodeErr = "Hanya huruf, angka, dan tanda -"; kodeCab = "!codePattern.matches(code)"; }
+  else { kodeErr = null; kodeCab = "else -> null"; }
+  jejak.push({ kolom: "Kode anak", mentah: input.childCode, olah: `trim().uppercase() = "${kode}"`, cabang: kodeCab, err: kodeErr });
+
+  const umurTeks = input.ageMonths.trim();
+  const umur = toIntOrNull(umurTeks);
+  let umurErr, umurCab;
+  if (umurTeks === "") { umurErr = "Usia wajib diisi"; umurCab = "ageText.isEmpty()"; }
+  else if (umur === null) { umurErr = "Isi dengan angka bulat"; umurCab = "age == null"; }
+  else if (umur < K.MIN_AGE || umur > K.MAX_AGE) { umurErr = `Isi ${K.MIN_AGE} sampai ${K.MAX_AGE} bulan`; umurCab = "age < MIN_AGE || age > MAX_AGE"; }
+  else { umurErr = null; umurCab = "else -> null"; }
+  jejak.push({ kolom: "Usia", mentah: input.ageMonths, olah: `toIntOrNull() = ${umur}`, cabang: umurCab, err: umurErr });
+
+  const tgl = input.measuredDate;
+  let tglErr, tglCab;
+  if (!tgl) { tglErr = "Tanggal wajib dipilih"; tglCab = "date == null"; }
+  else if (bandingTanggal(tgl, today) > 0) { tglErr = "Tanggal tidak boleh di masa depan"; tglCab = "date.isAfter(today)"; }
+  else { tglErr = null; tglCab = "else -> null"; }
+  jejak.push({ kolom: "Tanggal", mentah: tgl || "null", olah: `today = ${today}`, cabang: tglCab, err: tglErr });
+
+  const berat = parseDecimal(input.weightKg);
+  const [beratErr, beratCab] = decimalError(input.weightKg, berat, "Berat", K.MIN_WEIGHT, K.MAX_WEIGHT);
+  jejak.push({ kolom: "Berat", mentah: input.weightKg, olah: `parseDecimal() = ${berat}`, cabang: beratCab, err: beratErr });
+
+  const tinggi = parseDecimal(input.heightCm);
+  const [tinggiErr, tinggiCab] = decimalError(input.heightCm, tinggi, "Tinggi", K.MIN_HEIGHT, K.MAX_HEIGHT);
+  jejak.push({ kolom: "Tinggi", mentah: input.heightCm, olah: `parseDecimal() = ${tinggi}`, cabang: tinggiCab, err: tinggiErr });
+
+  const catatan = input.note.trim();
+  let catErr = null, catCab = "panjang <= MAX_NOTE_LENGTH";
+  if (mod.catatanWajib && catatan === "") { catErr = "Catatan wajib diisi"; catCab = "note.isEmpty()"; }
+  else if (catatan.length > K.MAX_NOTE_LENGTH) { catErr = `Maksimal ${K.MAX_NOTE_LENGTH} karakter`; catCab = "note.length > MAX_NOTE_LENGTH"; }
+  jejak.push({ kolom: "Catatan", mentah: input.note, olah: `trim().length = ${catatan.length}`, cabang: catCab, err: catErr });
+
+  const errors = { childCode: kodeErr, ageMonths: umurErr, measuredDate: tglErr, weightKg: beratErr, heightCm: tinggiErr, note: catErr };
+  const jumlah = Object.values(errors).filter(e => e !== null).length;
+  if (jumlah > 0) return { valid: false, errors, count: jumlah, jejak };
+  return { valid: true, errors, count: 0, jejak, nilai: { childCode: kode, ageMonths: umur, measuredDate: tgl, weightKg: berat, heightCm: tinggi, note: catatan } };
+}
+
+/** GrowthFormErrors.clearChanged: pesan kolom yang isinya berubah dihapus */
+function clearChanged(errors, lama, baru) {
+  const hasil = {};
+  for (const k of Object.keys(errors)) hasil[k] = lama[k] === baru[k] ? errors[k] : null;
+  return hasil;
+}
+
+/** Comparator newestFirst: tanggal lebih akhir dulu, lalu id lebih besar. Positif berarti a lebih lama dari b */
+function newestFirst(a, b) {
+  const t = bandingTanggal(b.measuredDate, a.measuredDate);
+  return t !== 0 ? t : b.id - a.id;
+}
+function sortNewestFirst(records) { return [...records].sort(newestFirst); }
+function previousOf(r, records) {
+  return sortNewestFirst(records.filter(x => x.childCode === r.childCode && x.id !== r.id && newestFirst(x, r) > 0))[0] || null;
+}
+function changeOf(r, records) {
+  const p = previousOf(r, records);
+  return p ? { previous: p, weightDiffKg: r.weightKg - p.weightKg, heightDiffCm: r.heightCm - p.heightCm } : null;
+}
+function measurementNumber(r, records) {
+  return records.filter(x => x.childCode === r.childCode && newestFirst(x, r) >= 0).length;
+}
+function summarize(records) {
+  return { totalRecords: records.length, totalChildren: new Set(records.map(r => r.childCode)).size, latest: sortNewestFirst(records)[0] || null };
+}
+
+/** Pembulatan HALF_UP satu desimal seperti String.format("%.1f") */
+function formatDecimal(v) {
+  const s = (Math.round(Math.abs(v) * 10 + 1e-9) / 10).toFixed(1).replace(".", ",");
+  return (v < 0 && s !== "0,0" ? "-" : "") + s;
+}
+function formatDiff(diff, unit, mod = MOD_ASLI) {
+  const r = Math.round(diff * 10) / 10;
+  const tanda = mod.tandaKata ? (r > 0 ? "naik" : r < 0 ? "turun" : "tetap") : (r > 0 ? "▲" : r < 0 ? "▼" : "=");
+  return `${tanda} ${formatDecimal(Math.abs(r))} ${unit}`;
+}
+function formatShortDate(iso) { const [y, m, d] = iso.split("-").map(Number); return `${d} ${BULAN[m - 1]} ${y}`; }
+function formatInputDate(iso) { const [y, m, d] = iso.split("-"); return `${d}/${m}/${y}`; }
+
+if (typeof module !== "undefined") module.exports = { validate, clearChanged, parseDecimal, toIntOrNull, summarize, changeOf, measurementNumber, sortNewestFirst, formatDiff, formatDecimal, formatShortDate, KONSTANTA_ASLI, MOD_ASLI };
+</script>
+
+<!-- ===================================================== -->
+<!-- TAMPILAN: sandbox, fungsi, latihan, kuis               -->
+<!-- ===================================================== -->
+<script>
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const hariIni = () => new Date().toLocaleDateString("sv-SE");
+const besok = () => { const d = new Date(); d.setDate(d.getDate() + 1); return d.toLocaleDateString("sv-SE"); };
+
+// State sandbox, sama dengan state di GrowthTrackScreen
+const FORM_KOSONG = { childCode: "", ageMonths: "", measuredDate: null, weightKg: "", heightCm: "", note: "" };
+const ERR_KOSONG = { childCode: null, ageMonths: null, measuredDate: null, weightKg: null, heightCm: null, note: null };
+const S = { records: [], nextId: 1, form: { ...FORM_KOSONG }, errors: { ...ERR_KOSONG }, K: { ...KONSTANTA_ASLI }, mod: { ...MOD_ASLI } };
+
+// ---------- Tampilan HP ----------
+function tile(label, nilai, unit, warna, foot, footAbu) {
+  return `<div class="tile"><div class="bar" style="background:${warna}"></div>
+    <div class="nilai">${esc(nilai)}${unit ? ` <small>${unit}</small>` : ""}</div>
+    <div class="lbl">${label}</div>${foot ? `<div class="foot ${footAbu ? "abu" : ""}">${esc(foot)}</div>` : ""}</div>`;
+}
+const WARNA_AVATAR = [["#D3EDDD", "#14563A"], ["#FFE1CF", "#8A4317"], ["#E4E1F5", "#433A80"]];
+function hashKotlin(s) { let h = 0; for (const c of s) h = (Math.imul(31, h) + c.charCodeAt(0)) | 0; return h; }
+
+function field(key, label, opsi = {}) {
+  const err = S.errors[key];
+  const nilai = S.form[key] ?? "";
+  const bantu = err ?? opsi.bantu ?? "";
+  const input = opsi.area
+    ? `<textarea data-k="${key}" rows="2">${esc(nilai)}</textarea>`
+    : `<input data-k="${key}" type="${opsi.type || "text"}" value="${esc(nilai)}" placeholder="${opsi.ph || ""}" ${opsi.max ? `max="${opsi.max}"` : ""}>`;
+  return `<div class="field ${err ? "err" : ""}"><label class="kecil">${label}</label>
+    <div class="kotak">${input}${opsi.satuan ? `<span class="satuan">${opsi.satuan}</span>` : ""}</div>
+    <div class="bantu">${esc(bantu)}</div></div>`;
+}
+
+function gambarHp() {
+  const sum = summarize(S.records);
+  const urut = S.mod.terlamaDulu ? sortNewestFirst(S.records).reverse() : sortNewestFirst(S.records);
+  const ada = sum.latest;
+  let h = `<div class="hp-header"><div class="hp-judul"><div class="hp-logo">♥</div>
+    <div><b>GrowthTrack Edu</b><small>Catat berat dan tinggi badan anak</small></div></div>
+    <div class="tiles">
+      ${tile("Pengukuran", sum.totalRecords, "", "var(--aksen)")}
+      ${S.mod.tileAnak ? tile("Kode anak", sum.totalChildren, "", "var(--aksen)") : ""}
+      ${tile("Berat terbaru", ada ? formatDecimal(ada.weightKg) : "-", ada ? "kg" : "", "var(--peach)")}
+      ${tile("Tinggi terbaru", ada ? formatDecimal(ada.heightCm) : "-", ada ? "cm" : "", "var(--aksen)")}
+    </div></div>`;
+  const jumlahErr = Object.values(S.errors).filter(Boolean).length;
+  h += jumlahErr
+    ? `<div class="banner salah">⚠ Data belum disimpan. Perbaiki ${jumlahErr} isian bertanda merah.</div>`
+    : `<div class="banner aman">ⓘ Pakai data simulasi. Hanya untuk edukasi, bukan diagnosis.</div>`;
+  h += `<div class="form"><h3>Tambah pengukuran</h3>
+    ${field("childCode", "Kode anak", { ph: "mis. A-01", bantu: "Contoh: A-01" })}
+    <div class="baris">${field("ageMonths", "Usia", { satuan: "bln", bantu: "0 sampai 60" })}
+      ${field("measuredDate", "Tanggal", { type: "date" })}</div>
+    <div class="baris">${field("weightKg", "Berat", { satuan: "kg", bantu: "1 sampai 40" })}
+      ${field("heightCm", "Tinggi", { satuan: "cm", bantu: "40 sampai 130" })}</div>
+    ${field("note", S.mod.catatanWajib ? "Catatan" : "Catatan (opsional)", { area: true })}
+    <button class="utama btn-simpan" id="btn-simpan">+ Simpan pengukuran</button>
+    <button class="btn-reset" id="btn-reset">Reset form</button></div>`;
+  h += `<div class="riwayat-judul"><b>Riwayat</b><small>${S.records.length === 0 ? "0 data" : `${S.records.length} data, ${S.mod.terlamaDulu ? "terlama" : "terbaru"} di atas`}</small></div>`;
+  if (urut.length === 0) {
+    h += `<div class="kosong"><div class="ikon">☰</div><b>Belum ada pengukuran</b><br><small>Isi form di atas, lalu tekan Simpan.</small></div>`;
+  }
+  for (const r of urut) {
+    const ch = changeOf(r, S.records), no = measurementNumber(r, S.records);
+    const [bg, fg] = WARNA_AVATAR[((hashKotlin(r.childCode) % 3) + 3) % 3];
+    const pertama = no <= 1;
+    const tagWarna = pertama ? "background:var(--muted);color:var(--teks2)" : S.mod.tagPeach ? "background:var(--peach-c);color:var(--peach-on)" : "background:var(--hijau-c);color:var(--hijau-on)";
+    const ket = [ch ? `Dibanding ${formatShortDate(ch.previous.measuredDate)}` : null, r.note ? `Catatan: ${r.note}` : null].filter(Boolean).join(". ");
+    h += `<div class="card"><div class="card-atas"><div class="avatar" style="background:${bg};color:${fg}">${esc(r.childCode)}</div>
+      <div class="nama"><b>Anak ${esc(r.childCode)}</b><small>${r.ageMonths} bulan · ${formatShortDate(r.measuredDate)}</small></div>
+      <span class="tag" style="${tagWarna}">${pertama ? "Pertama" : "Ke-" + no}</span></div>
+      <div class="tiles">${tile("Berat", formatDecimal(r.weightKg), "kg", "var(--peach)", ch ? formatDiff(ch.weightDiffKg, "kg", S.mod) : "Belum ada pembanding", !ch)}
+      ${tile("Tinggi", formatDecimal(r.heightCm), "cm", "var(--aksen)", ch ? formatDiff(ch.heightDiffCm, "cm", S.mod) : "Belum ada pembanding", !ch)}</div>
+      ${ket ? `<div class="ket">${esc(ket)}</div>` : ""}</div>`;
+  }
+  const isi = $("#hp-isi"), gulir = isi.scrollTop;
+  isi.innerHTML = h;
+  isi.scrollTop = gulir;
+  $("#btn-simpan").onclick = simpan;
+  $("#btn-reset").onclick = () => { S.form = { ...FORM_KOSONG }; S.errors = { ...ERR_KOSONG }; tulisJejak([{ judul: "resetForm()", isi: "form = GrowthFormInput() dan errors = GrowthFormErrors(). Semua kolom kosong, banner kembali peach.", ok: true }]); gambarHp(); };
+  isi.querySelectorAll("[data-k]").forEach(el => {
+    el.oninput = () => {
+      const baru = { ...S.form, [el.dataset.k]: el.type === "date" ? (el.value || null) : el.value };
+      const lama = S.form;
+      // Sama dengan onFormChange di GrowthTrackScreen
+      if ($("#pakai-clear").checked) {
+        const sebelum = S.errors[el.dataset.k];
+        S.errors = clearChanged(S.errors, lama, baru);
+        S.form = baru;
+        if (sebelum) { gambarHpTanpaFokusHilang(el); return; }
+      }
+      S.form = baru;
+      tulisState();
+    };
+  });
+  tulisState();
+}
+
+// Saat pesan merah dihapus, layar digambar ulang lalu fokus dikembalikan ke kolom yang sama
+function gambarHpTanpaFokusHilang(el) {
+  const k = el.dataset.k, pos = el.selectionStart;
+  gambarHp();
+  const baru = $(`#hp-isi [data-k="${k}"]`);
+  baru.focus();
+  try { baru.setSelectionRange(pos, pos); } catch (e) { /* input date tidak punya selection */ }
+}
+
+function simpan() {
+  const hasil = validate(S.form, hariIni(), S.K, S.mod);
+  const langkah = hasil.jejak.map(j => ({
+    judul: `${j.kolom}: "${j.mentah}"`,
+    isi: `${j.olah}<br>Cabang: <code class="inline">${esc(j.cabang)}</code>${j.err ? `<br>Pesan: <b style="color:var(--merah)">${esc(j.err)}</b>` : ""}`,
+    ok: !j.err
+  }));
+  if (!hasil.valid) {
+    S.errors = hasil.errors;
+    langkah.push({ judul: `ValidationResult.Invalid (${hasil.count} kolom salah)`, isi: "errors = result.errors. Data tidak ditambahkan ke records, banner berubah merah.", ok: false });
+  } else {
+    const r = { id: S.nextId, ...hasil.nilai };
+    S.records.push(r);
+    S.nextId++;
+    S.form = { ...FORM_KOSONG }; S.errors = { ...ERR_KOSONG };
+    const ch = changeOf(r, S.records);
+    langkah.push({ judul: "ValidationResult.Valid", isi: `records.add(GrowthRecord(id=${r.id}, childCode=${r.childCode}, ageMonths=${r.ageMonths}, measuredDate=${r.measuredDate}, weightKg=${r.weightKg}, heightCm=${r.heightCm}, note=${r.note}))<br>nextId++ menjadi ${S.nextId}, resetForm(), snackbar tampil.`, ok: true });
+    langkah.push({ judul: "Ringkasan dan card dihitung ulang", isi: `summarize(records): totalRecords = ${S.records.length}, latest = id ${summarize(S.records).latest.id}<br>measurementNumber = ${measurementNumber(r, S.records)}, changeOf = ${ch ? `berat ${formatDiff(ch.weightDiffKg, "kg", S.mod)}, tinggi ${formatDiff(ch.heightDiffCm, "cm", S.mod)} (dibanding id ${ch.previous.id})` : "null (Belum ada pembanding)"}`, ok: true });
+    snackbar(`Pengukuran ${r.childCode} tersimpan`);
+  }
+  tulisJejak(langkah);
+  gambarHp();
+}
+
+function snackbar(t) { const s = $("#snackbar"); s.textContent = t; s.classList.add("tampil"); clearTimeout(s._t); s._t = setTimeout(() => s.classList.remove("tampil"), 2500); }
+
+function tulisJejak(langkah) {
+  $("#tab-jejak").innerHTML = langkah.map(l => `<div class="langkah ${l.ok ? "ok" : "no"}"><b>${esc(l.judul)}</b>${l.isi}</div>`).join("");
+}
+
+function tulisState() {
+  const f = S.form;
+  $("#tab-state").innerHTML = `<pre>form = GrowthFormInput(
+    childCode = "${esc(f.childCode)}",
+    ageMonths = "${esc(f.ageMonths)}",
+    measuredDate = ${f.measuredDate ? f.measuredDate : "null"},
+    weightKg = "${esc(f.weightKg)}",
+    heightCm = "${esc(f.heightCm)}",
+    note = "${esc(f.note)}"
+)
+
+errors = GrowthFormErrors(${Object.entries(S.errors).filter(([, v]) => v).map(([k, v]) => `\n    ${k} = "${esc(v)}"`).join(",") || ""}${Object.values(S.errors).some(Boolean) ? "\n" : ""})
+errors.count = ${Object.values(S.errors).filter(Boolean).length}
+
+nextId = ${S.nextId}
+records (mutableStateListOf) = [${S.records.map(r => `\n    GrowthRecord(id=${r.id}, childCode=${r.childCode}, ageMonths=${r.ageMonths}, measuredDate=${r.measuredDate}, weightKg=${r.weightKg}, heightCm=${r.heightCm}, note=${esc(r.note)})`).join(",")}${S.records.length ? "\n" : ""}]</pre>`;
+}
+
+// Tombol tab di panel kanan
+document.querySelectorAll("[data-tab]").forEach(b => b.onclick = () => {
+  document.querySelectorAll("[data-tab]").forEach(x => x.classList.toggle("aktif", x === b));
+  ["jejak", "state", "konst"].forEach(t => $("#tab-" + t).style.display = t === b.dataset.tab ? "" : "none");
+});
+
+// ---------- Isi otomatis dari test case ----------
+const PRESET = [
+  ["3. Semua kosong", { ...FORM_KOSONG }],
+  ["2. Valid A-01 Sep", { childCode: "A-01", ageMonths: "12", measuredDate: "2026-09-22", weightKg: "10,2", heightCm: "77,2", note: "" }],
+  ["8. B-02 Okt", { childCode: "B-02", ageMonths: "24", measuredDate: "2026-10-15", weightKg: "12,1", heightCm: "86,0", note: "" }],
+  ["10. A-01 Okt (Ke-2)", { childCode: "A-01", ageMonths: "13", measuredDate: "2026-10-22", weightKg: "10,6", heightCm: "78,4", note: "Ukur pagi" }],
+  ["4. Huruf di angka", { childCode: "A-01", ageMonths: "7O", measuredDate: "2026-10-22", weightKg: "sepuluh", heightCm: "78a", note: "" }],
+  ["5. Negatif atau nol", { childCode: "A-01", ageMonths: "-1", measuredDate: "2026-10-22", weightKg: "-3", heightCm: "0", note: "" }],
+  ["6. Di luar batas", { childCode: "A-01", ageMonths: "61", measuredDate: "2026-10-22", weightKg: "41", heightCm: "250", note: "" }],
+  ["7. Tanggal besok, kode A 01", { childCode: "A 01", ageMonths: "13", measuredDate: null, weightKg: "10", heightCm: "78", note: "" }],
+  ["Figma 02: validasi gagal", { childCode: "", ageMonths: "7O", measuredDate: "2026-10-22", weightKg: "-3", heightCm: "250", note: "" }],
+];
+$("#preset").innerHTML = PRESET.map((p, i) => `<button data-p="${i}">${p[0]}</button>`).join("") + `<button data-p="hapus">Hapus semua riwayat</button>`;
+$("#preset").onclick = (e) => {
+  const p = e.target.dataset.p; if (p === undefined) return;
+  if (p === "hapus") { S.records = []; S.nextId = 1; tulisJejak([{ judul: "records.clear()", isi: "Sama dengan menutup aplikasi. Di UTS data hanya ada di memori.", ok: true }]); }
+  else { S.form = { ...PRESET[p][1] }; if (PRESET[p][0].startsWith("7.")) S.form.measuredDate = besok(); S.errors = { ...ERR_KOSONG }; }
+  gambarHp();
+};
+
+// ---------- Panel konstanta ----------
+function gambarKonst() {
+  $("#konst").innerHTML = Object.keys(KONSTANTA_ASLI).map(k => `<div><label class="kecil">${k}</label><input type="number" step="any" data-c="${k}" value="${S.K[k]}"></div>`).join("");
+  $("#konst").querySelectorAll("input").forEach(el => el.oninput = () => { const v = Number(el.value); if (el.value !== "" && Number.isFinite(v)) { S.K[el.dataset.c] = v; tulisKonstKotlin(); gambarHp(); } });
+  tulisKonstKotlin();
+}
+function tulisKonstKotlin() {
+  $("#konst-kotlin").textContent = Object.keys(KONSTANTA_ASLI).map(k => {
+    const v = S.K[k], asli = KONSTANTA_ASLI[k];
+    const teks = k.includes("WEIGHT") || k.includes("HEIGHT") ? (v % 1 === 0 ? v.toFixed(1) : String(v)) : String(v);
+    return `const val ${k} = ${teks}${v !== asli ? "   // diubah, asli " + asli : ""}`;
+  }).join("\n");
+}
+$("#reset-konst").onclick = () => { S.K = { ...KONSTANTA_ASLI }; gambarKonst(); gambarHp(); };
+
+// ---------- Bagian 2: fungsi satu per satu ----------
+function ikat(id, fn) { const el = $(id); const jalan = () => { $(id + "-out").textContent = fn(el.value); }; el.oninput = jalan; jalan(); return jalan; }
+ikat("#f-int", v => { const n = toIntOrNull(v.trim()); return `"${v.trim()}".toIntOrNull() = ${n}\n` + (v.trim() === "" ? "Cabang: ageText.isEmpty() -> \"Usia wajib diisi\"" : n === null ? "Cabang: age == null -> \"Isi dengan angka bulat\"" : (n < S.K.MIN_AGE || n > S.K.MAX_AGE) ? `Cabang: di luar ${S.K.MIN_AGE}..${S.K.MAX_AGE} -> "Isi ${S.K.MIN_AGE} sampai ${S.K.MAX_AGE} bulan"` : "Valid, usia = " + n); });
+ikat("#f-dec", v => { const ganti = v.trim().replaceAll(",", "."); const n = parseDecimal(v); return `trim().replace(',', '.') = "${ganti}"\ntoDoubleOrNull() lalu cek NaN/Infinity\nhasil = ${n}`; });
+ikat("#f-kode", v => { const r = validate({ ...FORM_KOSONG, childCode: v }, hariIni(), S.K, S.mod).jejak[0]; return `${r.olah}\nCabang: ${r.cabang}\nPesan: ${r.err ?? "null (valid)"}`; });
+const diffJalan = () => { const d = Number($("#f-diff").value.replace(",", ".")); $("#f-diff-out").textContent = Number.isFinite(d) ? `Math.round(${d} * 10) / 10.0 = ${Math.round(d * 10) / 10}\nformatDiff = "${formatDiff(d, $("#f-diff-unit").value, S.mod)}"` : "Isi angka, mis. 0.4 atau -0.2"; };
+$("#f-diff").oninput = diffJalan; $("#f-diff-unit").oninput = diffJalan; diffJalan();
+ikat("#f-fmt", v => { const d = Number(v.replace(",", ".")); return Number.isFinite(d) ? `formatDecimal(${d}) = "${formatDecimal(d)}"` : "Isi angka"; });
+const btJalan = () => { const t = $("#f-bt").value, b = $("#f-bt-jenis").value === "b"; const n = parseDecimal(t); const [e, c] = decimalError(t, n, b ? "Berat" : "Tinggi", b ? S.K.MIN_WEIGHT : S.K.MIN_HEIGHT, b ? S.K.MAX_WEIGHT : S.K.MAX_HEIGHT); $("#f-bt-out").textContent = `parseDecimal = ${n}\nCabang: ${c}\nPesan: ${e ?? "null (valid)"}`; };
+$("#f-bt").oninput = btJalan; $("#f-bt-jenis").onchange = btJalan; btJalan();
+
+// ---------- Bagian 3: live modification ----------
+// cek(kode) mengembalikan null bila benar, atau teks petunjuk kesalahan
+const TUGAS = [
+  {
+    judul: "Ubah batas usia menjadi 0 sampai 72 bulan", file: "logic/GrowthValidator.kt", siapa: "monica",
+    soal: "Dosen meminta aplikasi juga dipakai untuk anak sampai 6 tahun (72 bulan).",
+    awal: `object GrowthValidator {\n    const val MIN_AGE = 0\n    const val MAX_AGE = 60\n    const val MIN_WEIGHT = 1.0\n    const val MAX_WEIGHT = 40.0`,
+    jawab: `object GrowthValidator {\n    const val MIN_AGE = 0\n    const val MAX_AGE = 72\n    const val MIN_WEIGHT = 1.0\n    const val MAX_WEIGHT = 40.0`,
+    petunjuk: "Ubah satu angka di const val MAX_AGE. Pesan kesalahan \"Isi 0 sampai 60 bulan\" ikut berubah karena memakai $MAX_AGE. Teks bantuan \"0 sampai 60\" di bawah kolom Usia ditulis langsung di GrowthTrackScreen (help = \"0 sampai 60\"), jadi harus diganti manual. Unit test nilaiNegatifAtauNol_ditolak dan nilaiDiLuarBatas_ditolak juga akan gagal: pesannya berubah, dan usia 61 sekarang valid.",
+    cek: k => /const\s+val\s+MAX_AGE\s*=\s*72\b/.test(k) ? (/const\s+val\s+MIN_AGE\s*=\s*0\b/.test(k) ? null : "MIN_AGE jangan ikut diubah.") : "Cari baris const val MAX_AGE, ganti nilainya.",
+    terap: () => { S.K.MAX_AGE = 72; gambarKonst(); },
+    lihat: "Isi usia 70 di sandbox: sekarang diterima. Isi 73: pesannya \"Isi 0 sampai 72 bulan\". Perhatikan teks bantuan masih \"0 sampai 60\" karena ditulis langsung, itu yang perlu kamu ubah juga di Android Studio."
+  },
+  {
+    judul: "Ubah pesan \"Kode anak wajib diisi\" menjadi \"Kode anak belum diisi\"", file: "logic/GrowthValidator.kt", siapa: "monica",
+    soal: "Ganti teks pesan kesalahan untuk kode anak yang kosong.",
+    awal: `val codeError = when {\n    code.isEmpty() -> "Kode anak wajib diisi"\n    code.length > MAX_CODE_LENGTH -> "Maksimal $MAX_CODE_LENGTH karakter"\n    !codePattern.matches(code) -> "Hanya huruf, angka, dan tanda -"\n    else -> null\n}`,
+    jawab: `val codeError = when {\n    code.isEmpty() -> "Kode anak belum diisi"\n    code.length > MAX_CODE_LENGTH -> "Maksimal $MAX_CODE_LENGTH karakter"\n    !codePattern.matches(code) -> "Hanya huruf, angka, dan tanda -"\n    else -> null\n}`,
+    petunjuk: "Ubah string di cabang code.isEmpty(). Jangan lupa unit test inputWajibKosong_ditolak juga harus disesuaikan, karena test itu mengecek teks pesan yang lama.",
+    cek: k => /code\.isEmpty\(\)\s*->\s*"Kode anak belum diisi"/.test(k) ? null : "Cabang code.isEmpty() harus mengembalikan \"Kode anak belum diisi\".",
+    terap: () => { S.mod.pesanKode = "Kode anak belum diisi"; },
+    lihat: "Kosongkan kode anak di sandbox lalu tekan Simpan."
+  },
+  {
+    judul: "Catatan menjadi wajib diisi", file: "logic/GrowthValidator.kt", siapa: "monica",
+    soal: "Sekarang kolom catatan tidak boleh kosong. Pesan untuk catatan kosong: \"Catatan wajib diisi\".",
+    awal: `val note = input.note.trim()\nval noteError = if (note.length > MAX_NOTE_LENGTH) "Maksimal $MAX_NOTE_LENGTH karakter" else null`,
+    jawab: `val note = input.note.trim()\nval noteError = when {\n    note.isEmpty() -> "Catatan wajib diisi"\n    note.length > MAX_NOTE_LENGTH -> "Maksimal $MAX_NOTE_LENGTH karakter"\n    else -> null\n}`,
+    petunjuk: "Ganti if-else dengan when, mirip codeError. Urutannya: cek kosong dulu, baru cek panjang. Label \"Catatan (opsional)\" di GrowthTrackScreen juga diubah. Unit test inputWajibKosong_ditolak akan gagal karena jumlah error menjadi 6 dan errors.note tidak lagi null.",
+    cek: k => !/note\.isEmpty\(\)|note\.isBlank\(\)|note\s*==\s*""/.test(k) ? "Belum ada pengecekan catatan kosong (note.isEmpty())." : !/"Catatan wajib diisi"/.test(k) ? "Pesannya harus \"Catatan wajib diisi\"." : !/MAX_NOTE_LENGTH/.test(k) ? "Cek panjang maksimal jangan dihapus." : null,
+    terap: () => { S.mod.catatanWajib = true; },
+    lihat: "Simpan data valid tanpa catatan di sandbox. Sekarang muncul 1 isian merah."
+  },
+  {
+    judul: "Tambah tile jumlah kode anak di header", file: "ui/GrowthTrackScreen.kt", siapa: "andrew",
+    soal: "Tambahkan tile keempat \"Kode anak\" yang menampilkan jumlah anak berbeda. Nilainya sudah tersedia di summary.totalChildren.",
+    awal: `@Composable\nprivate fun SummaryHeader(totalRecords: Int, latest: GrowthRecord?) {\n    // ...\n    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {\n        MetricTile(\n            label = "Pengukuran",\n            value = totalRecords.toString(),\n            unit = "",\n            accent = HeightColor,\n            valueSize = 20,\n            modifier = Modifier.weight(1f)\n        )\n        // tile Berat terbaru dan Tinggi terbaru\n    }\n}`,
+    jawab: `@Composable\nprivate fun SummaryHeader(totalRecords: Int, totalChildren: Int, latest: GrowthRecord?) {\n    // ...\n    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {\n        MetricTile(\n            label = "Pengukuran",\n            value = totalRecords.toString(),\n            unit = "",\n            accent = HeightColor,\n            valueSize = 20,\n            modifier = Modifier.weight(1f)\n        )\n        MetricTile(\n            label = "Kode anak",\n            value = totalChildren.toString(),\n            unit = "",\n            accent = HeightColor,\n            valueSize = 20,\n            modifier = Modifier.weight(1f)\n        )\n        // tile Berat terbaru dan Tinggi terbaru\n    }\n}\n\n// Di GrowthTrackScreen, pemanggilnya ikut diubah:\n// SummaryHeader(totalRecords = summary.totalRecords, totalChildren = summary.totalChildren, latest = summary.latest)`,
+    petunjuk: "Tiga langkah: tambah parameter totalChildren: Int di SummaryHeader, salin satu MetricTile dan ganti label serta value-nya, lalu kirim summary.totalChildren dari pemanggil.",
+    cek: k => !/totalChildren\s*:\s*Int/.test(k) ? "Tambahkan parameter totalChildren: Int di SummaryHeader." : (k.match(/MetricTile\s*\(/g) || []).length < 2 ? "Belum ada MetricTile baru." : !/value\s*=\s*totalChildren\.toString\(\)/.test(k) ? "MetricTile baru harus memakai value = totalChildren.toString()." : !/label\s*=\s*"[^"]*anak[^"]*"/i.test(k) ? "Beri label yang menyebut \"anak\", mis. \"Kode anak\"." : null,
+    terap: () => { S.mod.tileAnak = true; },
+    lihat: "Header sandbox sekarang punya 4 tile. Simpan A-01 dua kali dan B-02 sekali: Pengukuran 3, Kode anak 2."
+  },
+  {
+    judul: "Ubah warna tag \"Ke-2\" menjadi peach", file: "ui/GrowthTrackScreen.kt", siapa: "andrew",
+    soal: "Tag \"Ke-2\", \"Ke-3\", dan seterusnya memakai warna peach. Tag \"Pertama\" tetap abu-abu.",
+    awal: `@Composable\nprivate fun MeasurementTag(number: Int) {\n    val first = number <= 1\n    Surface(\n        color = if (first) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.primaryContainer,\n        shape = RoundedCornerShape(8.dp)\n    ) {\n        Text(\n            if (first) "Pertama" else "Ke-$number",\n            color = if (first) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimaryContainer,\n            // ...\n        )\n    }\n}`,
+    jawab: `@Composable\nprivate fun MeasurementTag(number: Int) {\n    val first = number <= 1\n    Surface(\n        color = if (first) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.tertiaryContainer,\n        shape = RoundedCornerShape(8.dp)\n    ) {\n        Text(\n            if (first) "Pertama" else "Ke-$number",\n            color = if (first) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onTertiaryContainer,\n            // ...\n        )\n    }\n}`,
+    petunjuk: "Di Theme.kt, peach dipetakan ke tertiaryContainer (latar) dan onTertiaryContainer (teks). Ganti bagian else dari kedua if.",
+    cek: k => !/else\s+MaterialTheme\.colorScheme\.tertiaryContainer/.test(k) ? "Latar (color di Surface) untuk bagian else harus tertiaryContainer." : !/else\s+MaterialTheme\.colorScheme\.onTertiaryContainer/.test(k) ? "Warna teks untuk bagian else sebaiknya onTertiaryContainer supaya kontras." : /if \(first\) MaterialTheme\.colorScheme\.surfaceVariant/.test(k) ? null : "Warna tag \"Pertama\" (surfaceVariant) jangan diubah.",
+    terap: () => { S.mod.tagPeach = true; },
+    lihat: "Simpan A-01 dua kali di sandbox. Tag \"Ke-2\" sekarang peach."
+  },
+  {
+    judul: "Riwayat diurutkan dari yang terlama", file: "ui/GrowthTrackScreen.kt", siapa: "andrew",
+    soal: "Urutan card dibalik: pengukuran terlama di atas. Teks \"terbaru di atas\" ikut disesuaikan.",
+    awal: `val summary = GrowthCalculator.summarize(records)\nval sortedRecords = GrowthCalculator.sortNewestFirst(records)\n\n// ... di judul Riwayat\nText(\n    if (records.isEmpty()) "0 data" else "\${records.size} data, terbaru di atas",\n    // ...\n)`,
+    jawab: `val summary = GrowthCalculator.summarize(records)\nval sortedRecords = GrowthCalculator.sortNewestFirst(records).reversed()\n\n// ... di judul Riwayat\nText(\n    if (records.isEmpty()) "0 data" else "\${records.size} data, terlama di atas",\n    // ...\n)`,
+    petunjuk: "Tambahkan .reversed() di belakang sortNewestFirst(records). Jangan ubah comparator newestFirst di GrowthCalculator, karena previousOf dan summarize juga memakainya.",
+    cek: k => !/sortNewestFirst\(records\)\.(reversed|asReversed)\(\)/.test(k) ? "Balik hasil sortNewestFirst(records) dengan .reversed()." : !/terlama di atas/.test(k) ? "Ganti teks \"terbaru di atas\" menjadi \"terlama di atas\"." : null,
+    terap: () => { S.mod.terlamaDulu = true; },
+    lihat: "Isi beberapa data di sandbox. Card paling atas sekarang yang tanggalnya paling lama, tapi angka ringkasan tetap memakai data terbaru."
+  },
+  {
+    judul: "Tanda selisih memakai kata", file: "logic/Formatters.kt", siapa: "monica",
+    soal: "Ganti ▲, ▼, dan = menjadi \"naik\", \"turun\", dan \"tetap\".",
+    awal: `fun formatDiff(diff: Double, unit: String): String {\n    val rounded = Math.round(diff * 10) / 10.0\n    val sign = when {\n        rounded > 0 -> "▲"\n        rounded < 0 -> "▼"\n        else -> "="\n    }\n    return "$sign \${formatDecimal(abs(rounded))} $unit"\n}`,
+    jawab: `fun formatDiff(diff: Double, unit: String): String {\n    val rounded = Math.round(diff * 10) / 10.0\n    val sign = when {\n        rounded > 0 -> "naik"\n        rounded < 0 -> "turun"\n        else -> "tetap"\n    }\n    return "$sign \${formatDecimal(abs(rounded))} $unit"\n}`,
+    petunjuk: "Ubah ketiga string di when. Unit test formatSelisih di GrowthCalculatorTest juga harus disesuaikan.",
+    cek: k => /rounded\s*>\s*0\s*->\s*"naik"/.test(k) && /rounded\s*<\s*0\s*->\s*"turun"/.test(k) && /else\s*->\s*"tetap"/.test(k) ? null : "Ketiga cabang harus menjadi \"naik\", \"turun\", dan \"tetap\".",
+    terap: () => { S.mod.tandaKata = true; diffJalan(); },
+    lihat: "Simpan A-01 Sep lalu A-01 Okt. Card menampilkan \"naik 0,4 kg\"."
+  },
+];
+
+
+// Lokasi file yang diubah untuk setiap latihan, urutannya sama dengan TUGAS.
+// Path relatif dari root repo GrowthEduTrack. Nomor baris mengikuti commit 12 (81e2eda).
+const SRC = "app/src/main/java/id/ac/machung/growthtrackedu/";
+const TEST = "app/src/test/java/id/ac/machung/growthtrackedu/";
+const LOKASI = [
+  { files: [
+      [SRC + "logic/GrowthValidator.kt", "baris 84", "const val MAX_AGE = 60 menjadi 72"],
+      [SRC + "ui/GrowthTrackScreen.kt", "baris 319", "help = \"0 sampai 60\" di kolom Usia menjadi \"0 sampai 72\""],
+      [TEST + "GrowthValidatorTest.kt", "baris 73, 81, 82", "pesan \"Isi 0 sampai 60 bulan\" menjadi 72, dan usia \"61\" di nilaiDiLuarBatas_ditolak diganti \"73\" (61 sekarang valid)"]],
+    commit: "feat: extend age limit to 72 months" },
+  { files: [
+      [SRC + "logic/GrowthValidator.kt", "baris 104", "teks di cabang code.isEmpty()"],
+      [TEST + "GrowthValidatorTest.kt", "baris 51", "assertEquals(\"Kode anak wajib diisi\", ...) di inputWajibKosong_ditolak"]],
+    commit: "fix: change empty child code message" },
+  { files: [
+      [SRC + "logic/GrowthValidator.kt", "baris 137", "if-else diganti when dengan cek note.isEmpty()"],
+      [SRC + "ui/GrowthTrackScreen.kt", "baris 354", "label \"Catatan (opsional)\" menjadi \"Catatan\""],
+      [TEST + "GrowthValidatorTest.kt", "baris 56 dan 57", "assertNull(errors.note) menjadi assertEquals(\"Catatan wajib diisi\", errors.note), dan jumlah 5 menjadi 6"]],
+    commit: "feat: make measurement note required" },
+  { files: [
+      [SRC + "ui/GrowthTrackScreen.kt", "baris 219", "parameter totalChildren: Int dan MetricTile baru di SummaryHeader"],
+      [SRC + "ui/GrowthTrackScreen.kt", "baris 142", "pemanggil SummaryHeader(...) ditambah totalChildren = summary.totalChildren"]],
+    commit: "feat: add child count tile to summary header" },
+  { files: [
+      [SRC + "ui/GrowthTrackScreen.kt", "baris 476 (fungsi MeasurementTag)", "primaryContainer dan onPrimaryContainer menjadi tertiaryContainer dan onTertiaryContainer"]],
+    commit: "style: use peach color for repeat measurement tag" },
+  { files: [
+      [SRC + "ui/GrowthTrackScreen.kt", "baris 92", "tambah .reversed()"],
+      [SRC + "ui/GrowthTrackScreen.kt", "baris 184", "teks \"terbaru di atas\" menjadi \"terlama di atas\""]],
+    commit: "feat: show oldest measurement first in history" },
+  { files: [
+      [SRC + "logic/Formatters.kt", "baris 27 (fungsi formatDiff)", "string \"▲\", \"▼\", \"=\" di when"],
+      [TEST + "GrowthCalculatorTest.kt", "baris 61 sampai 63", "hasil yang diharapkan di formatSelisih"]],
+    commit: "feat: use words for growth difference sign" },
+];
+
+function kotakLokasi(i) {
+  const l = LOKASI[i];
+  return `<div class="lokasi"><b>Lokasi file</b> (repo GrowthEduTrack, branch main)
+    <table>${l.files.map(([path, baris, apa]) => `<tr><td><code>${esc(path)}</code><br><small>${esc(baris)}</small></td><td>${esc(apa)}</td></tr>`).join("")}</table>
+    <div style="margin-top:6px"><b>Pesan commit</b> (hanya kalau dosen minta disimpan):</div>
+    <pre>git add -A
+git commit -m "${esc(l.commit)}"
+git push</pre>
+    <small>Setelah latihan tanpa commit: <code>git restore .</code></small></div>`;
+}
+
+function gambarTugas() {
+  $("#daftar-tugas").innerHTML = TUGAS.map((t, i) => `<div class="kartu tugas" id="tugas-${i}">
+    <span class="status-tugas chip" id="st-${i}">Belum</span>
+    <h3>${i + 1}. ${esc(t.judul)}</h3>
+    <div><span class="chip ${t.siapa}">${t.siapa === "andrew" ? "Andrew (UI)" : "Monica (logika)"}</span></div>
+    <p>${esc(t.soal)}</p>
+    ${kotakLokasi(i)}
+    <p style="margin:8px 0 4px;font-size:14px">Potongan kode dari <code class="inline">${t.file}</code>. Edit di sini dulu:</p>
+    <textarea class="kode" spellcheck="false" id="kode-${i}" rows="${Math.max(6, t.awal.split("\n").length + 1)}">${esc(t.awal)}</textarea>
+    <div class="aksi"><button class="utama" data-cek="${i}">Periksa</button><button data-hint="${i}">Petunjuk</button><button data-jawab="${i}">Lihat jawaban</button><button data-ulang="${i}">Kembalikan kode awal</button></div>
+    <div class="umpan" id="umpan-${i}"></div>
+    <div class="petunjuk" id="hint-${i}">${esc(t.petunjuk)}</div>
+    <div class="jawaban" id="jawab-${i}"><pre>${esc(t.jawab)}</pre></div>
+  </div>`).join("");
+  $("#daftar-tugas").onclick = (e) => {
+    const d = e.target.dataset;
+    if (d.cek !== undefined) {
+      const t = TUGAS[d.cek], salah = t.cek($("#kode-" + d.cek).value), u = $("#umpan-" + d.cek);
+      if (salah) { u.className = "umpan salah"; u.textContent = "Belum tepat. " + salah; }
+      else {
+        t.terap(); gambarHp();
+        u.className = "umpan benar"; u.innerHTML = `Benar. Perubahan diterapkan ke sandbox. ${esc(t.lihat)} <a href="#sandbox">Lihat sandbox</a>`;
+        $("#st-" + d.cek).textContent = "Selesai"; $("#st-" + d.cek).className = "status-tugas chip bersama"; catatTugas(Number(d.cek));
+      }
+    }
+    if (d.hint !== undefined) { const h = $("#hint-" + d.hint); h.style.display = h.style.display === "block" ? "none" : "block"; }
+    if (d.jawab !== undefined) { const j = $("#jawab-" + d.jawab); j.style.display = j.style.display === "block" ? "none" : "block"; }
+    if (d.ulang !== undefined) { $("#kode-" + d.ulang).value = TUGAS[d.ulang].awal; $("#umpan-" + d.ulang).className = "umpan"; if (profil) { delete progres.kode[d.ulang]; simpanProgres(); } }
+  };
+  // Tab di textarea menyisipkan 4 spasi, bukan pindah fokus
+  document.querySelectorAll("textarea.kode").forEach(ta => ta.onkeydown = (e) => {
+    if (e.key !== "Tab") return;
+    e.preventDefault(); const s = ta.selectionStart;
+    ta.value = ta.value.slice(0, s) + "    " + ta.value.slice(ta.selectionEnd); ta.selectionStart = ta.selectionEnd = s + 4;
+  });
+}
+
+// ---------- Bagian 4: kuis defense ----------
+const SOAL = [
+  { s: "bersama", t: "Kenapa ageMonths di GrowthRecord bertipe Int, sedangkan weightKg bertipe Double?", o: ["Usia selalu bilangan bulat bulan, berat punya desimal seperti 10,6 kg", "Int lebih hemat memori sehingga semua angka sebaiknya Int", "Double hanya untuk angka negatif", "Supaya bisa disimpan sebagai String"], b: 0, p: "PDF 6.1 meminta tipe data sesuai makna. Usia dalam bulan tidak punya pecahan, berat dan tinggi punya." },
+  { s: "monica", t: "Apa fungsi kata kunci data pada data class GrowthRecord?", o: ["Membuat Kotlin otomatis membuatkan equals, hashCode, toString, dan copy", "Menyimpan objek ke database", "Membuat semua properti bisa diubah", "Mengubah class menjadi singleton"], b: 0, p: "Karena equals otomatis, unit test bisa membandingkan assertEquals(a2, summary.latest). copy(...) dipakai di form." },
+  { s: "monica", t: "Kenapa usia, berat, dan tinggi di GrowthFormInput masih bertipe String?", o: ["TextField selalu menghasilkan teks, konversi ke angka baru dilakukan saat validasi supaya input huruf tidak membuat crash", "Karena Kotlin tidak bisa menyimpan Int di data class", "Supaya hemat memori", "Karena data akan dikirim ke server"], b: 0, p: "Konversi dilakukan di GrowthValidator dengan toIntOrNull dan parseDecimal yang mengembalikan null bila gagal." },
+  { s: "monica", t: "Input usia \"7O\" (huruf O). Apa yang terjadi?", o: ["toIntOrNull() mengembalikan null, muncul pesan \"Isi dengan angka bulat\"", "Aplikasi crash dengan NumberFormatException", "Dianggap 70", "Dianggap 7"], b: 0, p: "toIntOrNull tidak melempar exception. Kalau memakai toInt(), aplikasi bisa crash." },
+  { s: "monica", t: "Kenapa GrowthValidator memakai object, bukan class?", o: ["Tidak menyimpan state, cukup satu instance dan dipanggil GrowthValidator.validate(form)", "Supaya bisa diwariskan", "Karena object lebih cepat dari fungsi biasa", "Wajib di Jetpack Compose"], b: 0, p: "object di Kotlin adalah singleton. Validator hanya berisi aturan dan konstanta." },
+  { s: "monica", t: "Apa keuntungan ValidationResult dibuat sebagai sealed class?", o: ["Hanya ada Valid atau Invalid, sehingga when (result) di layar wajib menangani keduanya", "Supaya bisa dibuat dari Java", "Supaya hasilnya bisa disimpan ke file", "Supaya tidak perlu import"], b: 0, p: "Compiler tahu semua turunan sealed class, jadi when tanpa else tetap lengkap." },
+  { s: "monica", t: "Berat diisi \"-3\". Pesan apa yang muncul dan kenapa bukan \"Isi 1 sampai 40\"?", o: ["\"Harus lebih dari 0\", karena cabang value <= 0.0 dicek sebelum cek batas", "\"Isi 1 sampai 40\", karena -3 di luar batas", "\"Isi dengan angka\", karena ada tanda minus", "Tidak ada pesan"], b: 0, p: "when berhenti di cabang pertama yang cocok. Urutannya: kosong, bukan angka, tidak positif, di luar batas." },
+  { s: "monica", t: "Kenapa parseDecimal mengganti koma dengan titik?", o: ["Orang Indonesia menulis 10,6, sedangkan toDoubleOrNull hanya mengenali titik", "Supaya angka dibulatkan", "Karena koma tidak bisa diketik di keyboard angka", "Untuk menghapus angka desimal"], b: 0, p: "Dengan replace(',', '.'), \"10,6\" dan \"10.6\" sama-sama diterima." },
+  { s: "monica", t: "Apa fungsi clearChanged di GrowthFormErrors?", o: ["Menghapus pesan merah hanya di kolom yang isinya baru diubah", "Menghapus semua pesan kesalahan", "Mengosongkan form", "Menyimpan data ke list"], b: 0, p: "takeIf { old == new } mempertahankan pesan lama bila kolom tidak berubah, selain itu null." },
+  { s: "monica", t: "Data: A-01 (22 Sep), B-02 (15 Okt), A-01 (22 Okt). Catatan sebelumnya dari A-01 22 Okt adalah?", o: ["A-01 22 Sep", "B-02 15 Okt", "Tidak ada", "A-01 22 Okt itu sendiri"], b: 0, p: "previousOf hanya melihat kode anak yang sama, jadi B-02 diabaikan walaupun tanggalnya lebih dekat." },
+  { s: "monica", t: "Kenapa totalChildren memakai distinct()?", o: ["Supaya A-01 yang diukur dua kali tetap dihitung satu anak", "Supaya urutannya acak", "Supaya kode kosong dibuang", "Supaya hasilnya String"], b: 0, p: "map { it.childCode } menghasilkan [A-01, B-02, A-01], distinct() menjadi [A-01, B-02], size = 2." },
+  { s: "monica", t: "formatDiff(0.01, \"kg\") menghasilkan apa?", o: ["\"= 0,0 kg\"", "\"▲ 0,01 kg\"", "\"▲ 0,0 kg\"", "\"0,01 kg\""], b: 0, p: "Selisih dibulatkan ke satu desimal dulu (0,0), lalu tandanya dicek dari nilai yang sudah dibulatkan." },
+  { s: "andrew", t: "Kenapa daftar catatan memakai mutableStateListOf, bukan mutableListOf biasa?", o: ["Compose ikut menggambar ulang layar setiap kali isi list berubah", "Supaya data tersimpan permanen", "Supaya list tidak bisa diubah", "Karena lebih cepat"], b: 0, p: "List biasa berubah tanpa memberi tahu Compose, jadi card baru tidak akan tampil." },
+  { s: "andrew", t: "Apa fungsi remember { ... } pada state di GrowthTrackScreen?", o: ["Menjaga nilai state saat fungsi Composable dipanggil ulang (recomposition)", "Menyimpan data ke penyimpanan HP", "Mengingat password", "Menjalankan kode di background"], b: 0, p: "Tanpa remember, state dibuat ulang dari awal setiap recomposition sehingga isian form hilang." },
+  { s: "andrew", t: "GrowthForm tidak punya state sendiri dan menerima form serta onFormChange dari luar. Pola ini disebut?", o: ["State hoisting", "Dependency injection", "Singleton", "Inheritance"], b: 0, p: "State dipegang GrowthTrackScreen, GrowthForm hanya menampilkan dan melaporkan perubahan." },
+  { s: "andrew", t: "Kenapa seluruh layar dibuat dalam satu LazyColumn?", o: ["Supaya form dan riwayat bisa digulir bersama, dan card hanya digambar saat terlihat", "Karena Column tidak bisa diisi Card", "Supaya data tersimpan di database", "Karena Scaffold mewajibkannya"], b: 0, p: "PDF 6.3 meminta LazyColumn untuk daftar, dan 6.5 meminta konten bisa digulir bila melebihi layar." },
+  { s: "andrew", t: "Apa fungsi key = { it.id } di items(sortedRecords, key = { it.id })?", o: ["Membantu Compose melacak setiap card, terutama saat urutan berubah", "Mengurutkan data berdasarkan id", "Menyembunyikan id dari layar", "Menyimpan id ke database"], b: 0, p: "Card baru masuk di atas. Dengan key, Compose tahu card mana yang sama dan tidak menggambar ulang semuanya." },
+  { s: "andrew", t: "Kenapa ringkasan di header berubah otomatis setelah Simpan?", o: ["summarize(records) dipanggil ulang setiap recomposition, dan recomposition terjadi karena records berubah", "Ada timer yang memperbarui setiap detik", "Karena tombol Simpan memanggil fungsi refresh", "Karena Room mengirim Flow"], b: 0, p: "Di UTS belum ada Room. Perubahan mutableStateListOf memicu recomposition, lalu ringkasan dihitung ulang." },
+  { s: "andrew", t: "Kenapa snackbar dipanggil di dalam scope.launch { ... }?", o: ["showSnackbar adalah suspend function yang menunggu pesan selesai tampil, jadi butuh coroutine", "Supaya snackbar muncul di layar lain", "Karena snackbar menyimpan data", "Supaya snackbar tidak pernah hilang"], b: 0, p: "rememberCoroutineScope memberi scope yang terikat dengan layar." },
+  { s: "andrew", t: "Apa fungsi Modifier.weight(1f) pada tiga MetricTile di header?", o: ["Membagi lebar Row sama rata untuk setiap tile", "Membuat tile lebih tebal", "Mengatur berat huruf", "Menambah jarak antar tile"], b: 0, p: "Setiap anak dengan weight(1f) mendapat bagian lebar yang sama." },
+  { s: "andrew", t: "Kenapa kolom tanggal memakai DatePicker dan readOnly = true?", o: ["Supaya format tanggal selalu benar dan menjadi jenis input kedua selain TextField", "Supaya tanggal tidak bisa diubah sama sekali", "Karena TextField tidak bisa menampilkan angka", "Supaya tanggal tersimpan otomatis"], b: 0, p: "PDF 6.2 meminta minimal dua jenis input berbeda. Tanggal juga tidak perlu di-parse dari teks." },
+  { s: "andrew", t: "Kenapa tema hanya mode terang dan tanpa dynamic color?", o: ["Supaya warna di semua HP sama dengan desain Figma", "Karena Android tidak mendukung mode gelap", "Supaya aplikasi lebih ringan", "Karena Material 3 tidak punya dynamic color"], b: 0, p: "Dynamic color (Android 12+) mengambil warna dari wallpaper sehingga tampilan bisa berbeda dari desain." },
+  { s: "bersama", t: "Apa yang terjadi pada data kalau aplikasi ditutup?", o: ["Hilang, karena UTS menyimpan data hanya di memori. Room baru dipakai di UAS", "Tersimpan di Room", "Tersimpan di SharedPreferences", "Dikirim ke server"], b: 0, p: "PDF bagian 1: aplikasi UTS belum memakai database." },
+  { s: "bersama", t: "Kenapa aplikasi tidak menghitung Z-score atau status stunting?", o: ["Aplikasi bersifat edukatif, dan menurut PDF diagnosis status gizi di luar batas tugas", "Karena rumusnya terlalu sulit", "Karena Kotlin tidak bisa menghitung desimal", "Karena tidak ada data tinggi badan"], b: 0, p: "Batas keselamatan studi kasus 7: UTS tidak mewajibkan Z-score atau diagnosis status gizi." },
+  { s: "bersama", t: "Dosen meminta batas usia 0 sampai 72 bulan. Bagian mana yang diubah?", o: ["const val MAX_AGE = 72 di GrowthValidator", "Semua teks \"60\" di GrowthTrackScreen", "Unit test saja", "AndroidManifest.xml"], b: 0, p: "Pesan kesalahan dan teks bantuan yang memakai konstanta ikut berubah. Teks bantuan \"0 sampai 60\" di NumberField ditulis langsung, jadi perlu disesuaikan juga." },
+  { s: "bersama", t: "Bagaimana cara menjalankan unit test validasi dan perhitungan?", o: ["./gradlew testDebugUnitTest, atau klik kanan app/src/test lalu Run Tests", "Menjalankan aplikasi di emulator", "./gradlew assembleRelease", "Membuka file test lalu menekan Ctrl+S"], b: 0, p: "Ada 12 unit test: 7 untuk validator, 5 untuk kalkulator." },
+];
+
+let filterKuis = "semua";
+const jawaban = {};
+function acak(arr, seed) { const a = arr.map((x, i) => [x, i]); let s = seed; for (let i = a.length - 1; i > 0; i--) { s = (s * 9301 + 49297) % 233280; const j = Math.floor(s / 233280 * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function gambarKuis() {
+  const daftar = SOAL.map((q, i) => ({ ...q, i })).filter(q => filterKuis === "semua" || q.s === filterKuis);
+  $("#daftar-soal").innerHTML = daftar.map((q, n) => {
+    const opsi = acak(q.o, q.i * 7 + 3);
+    const dijawab = jawaban[q.i];
+    return `<div class="kartu soal"><div><span class="chip ${q.s}">${q.s[0].toUpperCase() + q.s.slice(1)}</span></div>
+      <div class="teks">${n + 1}. ${esc(q.t)}</div>
+      ${opsi.map(([teks, asal]) => {
+        let kls = "";
+        if (dijawab !== undefined) { if (asal === q.b) kls = "benar"; else if (asal === dijawab) kls = "salah"; }
+        return `<button class="opsi ${kls}" data-q="${q.i}" data-o="${asal}" ${dijawab !== undefined ? "disabled" : ""}>${esc(teks)}</button>`;
+      }).join("")}
+      <div class="bahas" style="display:${dijawab !== undefined ? "block" : "none"}">${dijawab === q.b ? "Benar. " : "Jawaban yang benar sudah ditandai hijau. "}${esc(q.p)}</div></div>`;
+  }).join("");
+  const dijawab = daftar.filter(q => jawaban[q.i] !== undefined), benar = dijawab.filter(q => jawaban[q.i] === q.b);
+  $("#skor").textContent = `Skor: ${benar.length} benar dari ${dijawab.length} dijawab (total ${daftar.length} soal)`;
+}
+$("#daftar-soal").onclick = (e) => { const d = e.target.dataset; if (d.q === undefined) return; jawaban[d.q] = Number(d.o); catatJawaban(d.q, Number(d.o)); gambarKuis(); };
+document.querySelectorAll(".filter-kuis").forEach(b => b.onclick = () => { filterKuis = b.dataset.f; document.querySelectorAll(".filter-kuis").forEach(x => x.classList.toggle("aktif", x === b)); gambarKuis(); });
+$("#ulang-kuis").onclick = () => { for (const k in jawaban) delete jawaban[k]; progres.jawaban = {}; simpanProgres(); gambarKuis(); };
+
+
+// ---------- Profil (tanpa password) ----------
+// Progres disimpan di localStorage browser, terpisah per profil:
+// gte-data-andrew dan gte-data-monica berisi { jawaban, tugas, kode }.
+const NAMA_PROFIL = { andrew: "Andrew", monica: "Monica" };
+let profil = localStorage.getItem("gte-profil");
+let progres = { jawaban: {}, tugas: {}, kode: {} };
+
+function simpanProgres() { if (profil) localStorage.setItem("gte-data-" + profil, JSON.stringify(progres)); infoProgres(); }
+
+function infoProgres() {
+  const selesai = Object.keys(progres.tugas).length;
+  const dijawab = Object.keys(progres.jawaban).length;
+  const benar = Object.entries(progres.jawaban).filter(([i, o]) => SOAL[i] && SOAL[i].b === o).length;
+  $("#profil-info").textContent = profil ? `${NAMA_PROFIL[profil]}: ${selesai}/${TUGAS.length} latihan selesai, kuis ${benar}/${dijawab} benar` : "";
+}
+
+// Memuat progres profil: jawaban kuis, status latihan, isi kotak kode, dan modifikasi yang sudah diterapkan ke sandbox
+function muatProfil(nama) {
+  profil = nama;
+  localStorage.setItem("gte-profil", nama);
+  try { progres = { jawaban: {}, tugas: {}, kode: {}, ...JSON.parse(localStorage.getItem("gte-data-" + nama) || "{}") }; }
+  catch (e) { progres = { jawaban: {}, tugas: {}, kode: {} }; }
+  document.querySelectorAll(".profil-btn").forEach(b => b.classList.toggle("aktif", b.dataset.profil === nama));
+
+  for (const k in jawaban) delete jawaban[k];
+  Object.assign(jawaban, progres.jawaban);
+
+  S.K = { ...KONSTANTA_ASLI }; S.mod = { ...MOD_ASLI };
+  gambarTugas();
+  TUGAS.forEach((t, i) => {
+    if (progres.kode[i] !== undefined) $("#kode-" + i).value = progres.kode[i];
+    if (progres.tugas[i]) { t.terap(); $("#st-" + i).textContent = "Selesai"; $("#st-" + i).className = "status-tugas chip bersama"; }
+  });
+  gambarKonst(); diffJalan(); gambarHp();
+
+  // Filter kuis langsung ke bagian pemilik profil
+  filterKuis = nama;
+  document.querySelectorAll(".filter-kuis").forEach(x => x.classList.toggle("aktif", x.dataset.f === nama));
+  gambarKuis();
+  infoProgres();
+  const dlg = $("#pilih-profil"); if (dlg) dlg.remove();
+}
+
+document.querySelectorAll(".profil-btn").forEach(b => b.onclick = () => muatProfil(b.dataset.profil));
+$("#reset-progres").onclick = () => {
+  if (!profil) return;
+  localStorage.removeItem("gte-data-" + profil);
+  muatProfil(profil);
+};
+
+// Simpan isi kotak kode setiap kali diketik
+document.addEventListener("input", (e) => {
+  const m = e.target.id && e.target.id.match(/^kode-(\d+)$/);
+  if (m && profil) { progres.kode[m[1]] = e.target.value; simpanProgres(); }
+});
+
+// Simpan latihan yang lolos Periksa dan jawaban kuis (dipanggil dari handler yang sudah ada)
+function catatTugas(i) { progres.tugas[i] = true; simpanProgres(); }
+function catatJawaban(q, o) { progres.jawaban[q] = o; simpanProgres(); }
+
+function tanyaProfil() {
+  document.body.insertAdjacentHTML("beforeend", `<div class="pilih-profil" id="pilih-profil"><div class="kartu">
+    <h2>Siapa yang belajar?</h2><p class="sub">Progres latihan dan kuis disimpan terpisah untuk setiap profil di browser ini.</p>
+    <button class="utama" data-p="andrew">Andrew</button><button class="utama" data-p="monica">Monica</button></div></div>`);
+  $("#pilih-profil").onclick = (e) => { if (e.target.dataset.p) muatProfil(e.target.dataset.p); };
+}
+
+// ---------- Mulai ----------
+gambarKonst();
+gambarHp();
+gambarTugas();
+gambarKuis();
+if (profil && NAMA_PROFIL[profil]) muatProfil(profil); else tanyaProfil();
+</script>
+</body>
+</html>
